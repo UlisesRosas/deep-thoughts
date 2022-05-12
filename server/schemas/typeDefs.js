@@ -6,6 +6,8 @@ const { gql } = require('apollo-server-express');
 // the atuff in the back ticks is called a tagged template function
 // type Query is getting data we use type mutation for post, update and delete requests
 // we define each custom datatype before we put it in the query
+// below query we have a mutation that is for request for data that gets altered such as creatind a user
+// 'me' is an authentication token 
 const typeDefs = gql`
 type Thought {
     _id: ID
@@ -29,12 +31,25 @@ type Thought {
     thoughts: [Thought]
     friends: [User]
   }
+  type Auth {
+    token: ID!
+    user: User
+  }
     type Query {
+        me: User
         users: [User]
         user(username: String!): User
         thoughts(username: String): [Thought]
         thought(_id: ID!): Thought
-  }`;
+  }
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    addThought(thoughtText: String!): Thought
+    addReaction(thoughtId: ID!, reactionBody: String!): Thought
+    addFriend(friendId: ID!): User
+  }`
+  ;
 
 // export the typeDefs
 module.exports = typeDefs;
