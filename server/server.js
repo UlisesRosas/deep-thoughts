@@ -9,6 +9,9 @@ const db = require('./config/connection');
 // auth middleware function
 const { authMiddleware } = require('./utils/auth');
 
+// This will allow us to conect the back end to the front end and render requests
+const path = require('path');
+
 const PORT = process.env.PORT || 3001;
 // create a new instance of Apollo server and pass in our schema data
 const server = new ApolloServer({
@@ -28,6 +31,17 @@ const startApolloServer = async (typeDefs, resolvers) => {
 await server.start();
 // integrate our Apollo server with the Express application as middleware
 server.applyMiddleware({ app });
+
+// Serve up static assets
+// NOTE:only work durring production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+// NOTE:only work durring production
+// this wild card serves production ready front end code for any GET request without a specific route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 db.once('open', () => {
     app.listen(PORT, () => {
