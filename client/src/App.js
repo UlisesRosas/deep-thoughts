@@ -1,9 +1,16 @@
 import React from 'react';
-
+// components
 import Header from './components/Header';
 import Footer from './components/Footer';
-
 import Home from './pages/Home';
+import Login from './pages/Login';
+import NoMatch from './pages/NoMatch';
+import SingleThought from './pages/SingleThought';
+import Profile from './pages/Profile';
+import Signup from './pages/Signup';
+// these libraries will enable the creation of routes
+// 'as' renames 'BriwserRouter with the following names'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // ApolloProvider is a special type of React component that we'll use to provide data to all of the other components.
 // ApolloClient is a constructor function that will help initialize the connection to the GraphQL API server.
 // InMemoryCache enables the Apollo Client instance to cache API response data so that we can perform requests more efficiently.
@@ -13,7 +20,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@ap
 // establish link to graphql server
 // NOTE: This would cause an error in production
 // const httpLink = createHttpLink({
-  // establishes connection to Api endpoint
+// establishes connection to Api endpoint
 //   uri: 'http://localhost:3001/graphql',
 // });
 
@@ -32,16 +39,49 @@ const client = new ApolloClient({
 
 function App() {
   return (
-    // passing in the client variables thoru this ApolloProvider
+    // passing client variables throgh Apollo provider
     <ApolloProvider client={client}>
-    <div className="flex-column justify-flex-start min-100-vh">
-      <Header />
-      <div className="container">
-        <Home />
-      </div>
-      <Footer />
-    </div>
-  </ApolloProvider>
+      {/* "Router" allows us to use "Routes" and render components through routes different paths that change state */}
+      <Router>
+        <div className="flex-column justify-flex-start min-100-vh">
+          <Header />
+          <div className="container">
+            {/* within Routes we have a "Route" or multiple "Routes" */}
+            <Routes>
+              {/* one route will direct page to render a component */}
+              <Route
+                // this path assigns the path to the element below
+                path="/"
+                // this element will render when the specific path is detected
+                element={<Home />}
+              />
+              <Route
+                path="/login"
+                element={<Login />}
+              />
+              <Route
+                path="/signup"
+                element={<Signup />}
+              />
+              <Route
+              // here our route has a param specified after the ':' and the '?' means its optional
+                path="/profile/:username?"
+                element={<Profile />}
+              />
+              <Route
+                path="/thought/:id"
+                element={<SingleThought />}
+              />
+              <Route
+                path="*"
+                element={<NoMatch />}
+              />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
+      </Router>
+    </ApolloProvider>
   );
 }
 
