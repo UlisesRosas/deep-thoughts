@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-// these thoughts are foe all users to see signed in or not
+// these thoughts are for all users to see signed in or not
 export const QUERY_THOUGHTS = gql`
   query thoughts($username: String) {
     thoughts(username: $username) {
@@ -53,6 +53,51 @@ export const QUERY_USER = gql`
         thoughtText
         createdAt
         reactionCount
+      }
+    }
+  }
+`;
+
+// retreves all the data related to the logged in user
+export const QUERY_ME = gql`
+  {
+    me {
+      _id
+      username
+      email
+      friendCount
+      thoughts {
+        _id
+        thoughtText
+        createdAt
+        reactionCount
+        reactions {
+          _id
+          createdAt
+          reactionBody
+          username
+        }
+      }
+      friends {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+// retreves all the data related to the logged in user but with less unecessary stuff
+// in graphql we dont need another route for a query we can just reuse one and alter the data we want returned
+export const QUERY_ME_BASIC = gql`
+  {
+    me {
+      _id
+      username
+      email
+      friendCount
+      friends {
+        _id
+        username
       }
     }
   }
