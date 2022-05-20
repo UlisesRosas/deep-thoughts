@@ -3,7 +3,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom'
 import { QUERY_THOUGHT } from '../utils/queries';
-import Auth from '../../utils/auth';
+import Auth from '../utils/auth';
 import ReactionForm from '../components/ReactionForm';
 import ReactionList from '../components/ReactionList';
 
