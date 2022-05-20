@@ -7,6 +7,8 @@ import { QUERY_THOUGHTS, QUERY_ME_BASIC } from '../utils/queries';
 import ThoughtList from '../components/ThoughtList';
 // importing the friends list component
 import FriendList from '../components/FriendList';
+// importing the ThoughtForm component
+import ThoughtForm from '../components/ThoughtForm';
 // we also need to check for authentication on this page
 import Auth from '../utils/auth';
 
@@ -31,26 +33,32 @@ const Home = () => {
   return (
     <main>
       <div className="flex-row justify-space-between">
-        {/* conditionaly defines the styling of the div it eill mskr mre dpace in the right hand side if logged in for more content */}
-        <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>
-          {/* if loading a loading bar appears */}
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <ThoughtList thoughts={thoughts} title="Some Feed for Thought(s)..." />
+        {/* the ability to submit a thougth is conditional to being logged in */}
+          {loggedIn && (
+            <div className="col-12 mb-3">
+              <ThoughtForm />
+            </div>
           )}
-        </div>
-        {/* conditionallu renders this portion if logged in and userDate are true if not it id null */}
-        {loggedIn && userData ? (
-          <div className="col-12 col-lg-3 mb-3">
-            <FriendList
-              username={userData.me.username}
-              friendCount={userData.me.friendCount}
-              friends={userData.me.friends}
-            />
+          {/* conditionaly defines the styling of the div it eill mskr mre dpace in the right hand side if logged in for more content */}
+          <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>
+            {/* if loading a loading bar appears */}
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <ThoughtList thoughts={thoughts} title="Some Feed for Thought(s)..." />
+            )}
           </div>
-        ) : null}
-      </div>
+          {/* conditionallu renders this portion if logged in and userDate are true if not it id null */}
+          {loggedIn && userData ? (
+            <div className="col-12 col-lg-3 mb-3">
+              <FriendList
+                username={userData.me.username}
+                friendCount={userData.me.friendCount}
+                friends={userData.me.friends}
+              />
+            </div>
+          ) : null}
+        </div>
     </main>
   );
 };
